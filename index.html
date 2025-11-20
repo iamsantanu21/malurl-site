@@ -1,26 +1,161 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>MalURL - Malicious URL Detector</title>
-  <meta charset="UTF-8" />
+  <meta charset="utf-8" />
+  <title>MalURL – Malicious URL Detector Chrome Extension</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta
+    name="description"
+    content="MalURL is a Chrome extension that detects malicious URLs (phishing, malware, defacement) in real time using a machine learning model."
+  />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>MalURL - Malicious URL Detector</h1>
-  <p>
-    MalURL is a Chrome extension that detects malicious URLs using NLP-based machine learning.
-  </p>
+  <header class="nav">
+    <div class="container nav-inner">
+      <div class="logo">MalURL</div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#install">Install</a>
+      </nav>
+    </div>
+  </header>
 
-  <h2>Features</h2>
-  <ul>
-    <li>Classifies URLs as Safe or Malicious</li>
-    <li>NLP-based feature extraction</li>
-    <li>FastAPI backend model</li>
-  </ul>
+  <main>
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <h1>Malicious URL Detection <span>inside your browser</span></h1>
+          <p>
+            MalURL is an NLP + ML powered Chrome extension that analyzes URLs
+            and detects phishing, malware, and defacement websites before you
+            click.
+          </p>
 
-  <p>GitHub Repository: <a href="https://github.com/iamsantanu21/MalUrl-final" target="_blank">MalUrl-final</a></p>
+          <div class="hero-buttons" id="install">
+            <!-- Button 1: Chrome Web Store (use real URL once published) -->
+            <a
+              class="btn primary"
+              href="https://chrome.google.com/webstore/detail/REPLACE_WITH_YOUR_ID"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ⭐ Add MalURL to Chrome
+            </a>
 
-  <p>
-    <a href="/privacy.html">Privacy Policy</a>
-  </p>
+            <!-- Button 2: direct ZIP download for developer mode -->
+            <a
+              class="btn secondary"
+              href="downloads/malurl-extension.zip"
+              download
+            >
+              ⬇ Download ZIP (Developer mode)
+            </a>
+          </div>
+
+          <p class="small-note">
+            For now use the ZIP with Chrome’s Developer Mode.
+            Once MalURL is live on the Chrome Web Store you can use the first button.
+          </p>
+        </div>
+
+        <div class="hero-card">
+          <h2>What MalURL checks</h2>
+          <ul>
+            <li>🔗 Suspicious URL structure &amp; encoded paths</li>
+            <li>🧠 ML-based classification (SAFE / PHISHING / MALWARE / DEFACEMENT)</li>
+            <li>🛡️ Built-in whitelist for trusted domains</li>
+            <li>⚡ FastAPI backend hosted on Render</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES SECTION -->
+    <section id="features" class="section">
+      <div class="container">
+        <h2>Features</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>Real-time detection</h3>
+            <p>Every URL you check is analyzed in real time by a trained LightGBM model.</p>
+          </div>
+          <div class="card">
+            <h3>NLP + feature engineering</h3>
+            <p>Advanced character and token-level features extracted from the URL structure.</p>
+          </div>
+          <div class="card">
+            <h3>Clear risk labels</h3>
+            <p>See if a URL is SAFE, PHISHING, MALWARE, or DEFACEMENT directly in Chrome.</p>
+          </div>
+          <div class="card">
+            <h3>Privacy-friendly</h3>
+            <p>
+              Only the URL string is sent to the backend for scoring. No passwords,
+              forms, or page content are collected.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section id="how-it-works" class="section alt">
+      <div class="container">
+        <h2>How it works</h2>
+        <ol class="steps">
+          <li>
+            <strong>1. Install the extension</strong> using the buttons above.
+          </li>
+          <li>
+            <strong>2. Open any website or paste a URL</strong> into the MalURL popup.
+          </li>
+          <li>
+            <strong>3. The URL is sent to a FastAPI server</strong> hosted on Render,
+            where the LightGBM model runs.
+          </li>
+          <li>
+            <strong>4. You immediately see the prediction</strong> and probability
+            for each class.
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- INSTALL INSTRUCTIONS (DEV MODE) -->
+    <section class="section" id="dev-mode">
+      <div class="container">
+        <h2>Install using Developer Mode (temporary)</h2>
+        <div class="card instructions">
+          <ol>
+            <li>Click <strong>“Download ZIP (Developer mode)”</strong> above.</li>
+            <li>Unzip the file somewhere on your computer.</li>
+            <li>Open <code>chrome://extensions</code> in Chrome.</li>
+            <li>Turn on <strong>Developer mode</strong> (top-right toggle).</li>
+            <li>Click <strong>“Load unpacked”</strong> and select the unzipped folder.</li>
+            <li>MalURL will appear in your extensions bar. Pin it for quick access.</li>
+          </ol>
+          <p class="small-note">
+            Once the extension is published on the Chrome Web Store, users won’t
+            need Developer mode – they can just click “Add to Chrome”.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <p>© <span id="year"></span> MalURL – Malicious URL Detector.</p>
+      <p>Built by Santanu Mondal.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Set current year in footer
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
