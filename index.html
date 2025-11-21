@@ -1,161 +1,436 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <title>MalURL – Malicious URL Detector Chrome Extension</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta
-    name="description"
-    content="MalURL is a Chrome extension that detects malicious URLs (phishing, malware, defacement) in real time using a machine learning model."
-  />
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <header class="nav">
-    <div class="container nav-inner">
-      <div class="logo">MalURL</div>
-      <nav>
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How it works</a>
-        <a href="#install">Install</a>
-      </nav>
-    </div>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <title>MalURLX — Malicious URL Detector (Developer Version)</title>
+    <meta
+      name="description"
+      content="MalURLX is a Chrome extension that helps you detect potentially malicious URLs using a machine learning model."
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <main>
-    <!-- HERO SECTION -->
-    <section class="hero">
-      <div class="container hero-inner">
-        <div class="hero-text">
-          <h1>Malicious URL Detection <span>inside your browser</span></h1>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: #050816;
+        color: #e5e7eb;
+        line-height: 1.6;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      header {
+        border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(10px);
+        background: rgba(5, 8, 22, 0.9);
+      }
+
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 1.2rem 1.4rem;
+      }
+
+      .nav-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+      }
+
+      .logo {
+        font-weight: 700;
+        font-size: 1.15rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+
+      .logo-badge {
+        width: 26px;
+        height: 26px;
+        border-radius: 999px;
+        background: radial-gradient(circle at 20% 20%, #22c55e, #0f172a);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.8rem;
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 1.2rem;
+        font-size: 0.95rem;
+      }
+
+      .nav-links a {
+        opacity: 0.8;
+      }
+
+      .nav-links a:hover {
+        opacity: 1;
+      }
+
+      main {
+        padding: 2rem 1.4rem 3rem;
+      }
+
+      .hero {
+        max-width: 900px;
+        margin: 0 auto 2.5rem;
+        display: grid;
+        grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+        gap: 2rem;
+        align-items: center;
+      }
+
+      @media (max-width: 768px) {
+        .hero {
+          grid-template-columns: minmax(0, 1fr);
+        }
+      }
+
+      .hero-title {
+        font-size: clamp(2.1rem, 4vw, 2.6rem);
+        font-weight: 700;
+        margin-bottom: 0.8rem;
+      }
+
+      .hero-title span {
+        background: linear-gradient(135deg, #22c55e, #38bdf8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+      }
+
+      .hero-subtitle {
+        font-size: 0.98rem;
+        color: #9ca3af;
+        margin-bottom: 1.4rem;
+      }
+
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 0.15rem 0.7rem;
+        border-radius: 999px;
+        font-size: 0.75rem;
+        border: 1px solid rgba(148, 163, 184, 0.5);
+        color: #9ca3af;
+        margin-bottom: 0.7rem;
+      }
+
+      .btn-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+        margin-bottom: 0.7rem;
+      }
+
+      .btn-primary {
+        padding: 0.7rem 1.3rem;
+        border-radius: 999px;
+        border: none;
+        background: radial-gradient(circle at 20% 20%, #22c55e, #14532d);
+        color: white;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.45rem;
+        box-shadow: 0 14px 35px rgba(34, 197, 94, 0.35);
+      }
+
+      .btn-primary span.icon {
+        font-size: 1.1rem;
+      }
+
+      .btn-secondary {
+        padding: 0.7rem 1.2rem;
+        border-radius: 999px;
+        border: 1px solid rgba(148, 163, 184, 0.6);
+        background: transparent;
+        color: #e5e7eb;
+        font-size: 0.9rem;
+        cursor: pointer;
+      }
+
+      .hint {
+        font-size: 0.8rem;
+        color: #9ca3af;
+      }
+
+      .hero-card {
+        border-radius: 1.1rem;
+        border: 1px solid rgba(148, 163, 184, 0.25);
+        background: radial-gradient(circle at top left, rgba(34, 197, 94, 0.18), transparent 60%),
+          radial-gradient(circle at bottom, rgba(56, 189, 248, 0.18), transparent 55%),
+          #020617;
+        padding: 1.3rem 1.2rem 1.2rem;
+        font-size: 0.9rem;
+      }
+
+      .hero-card h2 {
+        font-size: 1rem;
+        margin-bottom: 0.6rem;
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+      }
+
+      .hero-card h2 span {
+        font-size: 1.1rem;
+      }
+
+      .hero-card ul {
+        list-style: none;
+        margin-top: 0.6rem;
+      }
+
+      .hero-card li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.4rem;
+        margin-bottom: 0.4rem;
+        color: #d1d5db;
+      }
+
+      .hero-card li span.bullet {
+        font-size: 0.8rem;
+        margin-top: 0.1rem;
+      }
+
+      section {
+        max-width: 900px;
+        margin: 0 auto 2.5rem;
+      }
+
+      section h2 {
+        font-size: 1.2rem;
+        margin-bottom: 0.6rem;
+      }
+
+      section p {
+        font-size: 0.94rem;
+        color: #d1d5db;
+        margin-bottom: 0.4rem;
+      }
+
+      ol.dev-steps {
+        margin-left: 1.2rem;
+        font-size: 0.93rem;
+      }
+
+      ol.dev-steps li {
+        margin-bottom: 0.4rem;
+      }
+
+      code {
+        font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+          Consolas, "Liberation Mono", "Courier New", monospace;
+        font-size: 0.85rem;
+        background: rgba(15, 23, 42, 0.9);
+        padding: 0.1rem 0.35rem;
+        border-radius: 0.35rem;
+        border: 1px solid rgba(31, 41, 55, 0.9);
+      }
+
+      footer {
+        border-top: 1px solid rgba(148, 163, 184, 0.3);
+        padding: 1.4rem 1.4rem 2rem;
+        font-size: 0.8rem;
+        color: #9ca3af;
+      }
+
+      footer .footer-inner {
+        max-width: 900px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        flex-wrap: wrap;
+      }
+
+      footer a {
+        text-decoration: underline;
+        text-decoration-style: dotted;
+        text-underline-offset: 2px;
+        opacity: 0.9;
+      }
+
+      footer a:hover {
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container nav-bar">
+        <div class="logo">
+          <div class="logo-badge">M</div>
+          <span>MalURLX</span>
+        </div>
+        <nav class="nav-links">
+          <a href="#install">Install (Dev Mode)</a>
+          <a href="#how-it-works">How it works</a>
+          <a href="privacy.html">Privacy</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <div class="hero-badge">
+            <span>Developer build</span>
+            <span>·</span>
+            <span>Chrome extension (local install)</span>
+          </div>
+          <h1 class="hero-title">
+            Detect <span>malicious URLs</span> directly from your browser.
+          </h1>
+          <p class="hero-subtitle">
+            MalURLX is an NLP and machine-learning based Chrome extension that helps you
+            classify suspicious URLs as <strong>SAFE, DEFACEMENT, MALWARE</strong>, or
+            <strong>PHISHING</strong> before you click.
+          </p>
+
+          <div class="btn-row">
+            <!-- 🔽 Direct ZIP download button -->
+            <a
+              class="btn-primary"
+              href="https://github.com/iamsantanu21/MalUrl-final/raw/bf954dba81b980dfe382ed7aaab3cba069af352b/MalUrl.zip"
+              download="MalUrl.zip"
+            >
+              <span class="icon">⬇️</span>
+              <span>Download extension (ZIP)</span>
+            </a>
+
+            <a class="btn-secondary" href="#install">
+              View developer-mode install steps
+            </a>
+          </div>
+
+          <p class="hint">
+            Note: This version is not yet on the Chrome Web Store. You will install it
+            manually using <code>Developer mode</code>.
+          </p>
+        </div>
+
+        <aside class="hero-card">
+          <h2><span>🛡️</span> What MalURLX does</h2>
           <p>
-            MalURL is an NLP + ML powered Chrome extension that analyzes URLs
-            and detects phishing, malware, and defacement websites before you
-            click.
+            Behind the scenes, a trained LightGBM model and custom URL feature extractor
+            analyze each URL you submit.
           </p>
-
-          <div class="hero-buttons" id="install">
-            <!-- Button 1: Chrome Web Store (use real URL once published) -->
-            <a
-              class="btn primary"
-              href="https://chrome.google.com/webstore/detail/REPLACE_WITH_YOUR_ID"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              ⭐ Add MalURL to Chrome
-            </a>
-
-            <!-- Button 2: direct ZIP download for developer mode -->
-            <a
-              class="btn secondary"
-              href="downloads/malurl-extension.zip"
-              download
-            >
-              ⬇ Download ZIP (Developer mode)
-            </a>
-          </div>
-
-          <p class="small-note">
-            For now use the ZIP with Chrome’s Developer Mode.
-            Once MalURL is live on the Chrome Web Store you can use the first button.
-          </p>
-        </div>
-
-        <div class="hero-card">
-          <h2>What MalURL checks</h2>
           <ul>
-            <li>🔗 Suspicious URL structure &amp; encoded paths</li>
-            <li>🧠 ML-based classification (SAFE / PHISHING / MALWARE / DEFACEMENT)</li>
-            <li>🛡️ Built-in whitelist for trusted domains</li>
-            <li>⚡ FastAPI backend hosted on Render</li>
+            <li>
+              <span class="bullet">•</span>
+              <span>Normalizes the URL and extracts handcrafted features.</span>
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              <span>
+                Predicts one of four classes:
+                <strong>SAFE / DEFACEMENT / MALWARE / PHISHING</strong>.
+              </span>
+            </li>
+            <li>
+              <span class="bullet">•</span>
+              <span>Processes everything through a FastAPI backend you control.</span>
+            </li>
           </ul>
-        </div>
-      </div>
-    </section>
+        </aside>
+      </section>
 
-    <!-- FEATURES SECTION -->
-    <section id="features" class="section">
-      <div class="container">
-        <h2>Features</h2>
-        <div class="grid">
-          <div class="card">
-            <h3>Real-time detection</h3>
-            <p>Every URL you check is analyzed in real time by a trained LightGBM model.</p>
-          </div>
-          <div class="card">
-            <h3>NLP + feature engineering</h3>
-            <p>Advanced character and token-level features extracted from the URL structure.</p>
-          </div>
-          <div class="card">
-            <h3>Clear risk labels</h3>
-            <p>See if a URL is SAFE, PHISHING, MALWARE, or DEFACEMENT directly in Chrome.</p>
-          </div>
-          <div class="card">
-            <h3>Privacy-friendly</h3>
-            <p>
-              Only the URL string is sent to the backend for scoring. No passwords,
-              forms, or page content are collected.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+      <section id="install">
+        <h2>How to install the extension (Developer mode)</h2>
+        <p>
+          Because MalURLX is not yet published on the Chrome Web Store, you need to
+          install it in <strong>Developer mode</strong>. This is simple and safe if you
+          trust the code.
+        </p>
 
-    <!-- HOW IT WORKS SECTION -->
-    <section id="how-it-works" class="section alt">
-      <div class="container">
-        <h2>How it works</h2>
-        <ol class="steps">
+        <ol class="dev-steps">
           <li>
-            <strong>1. Install the extension</strong> using the buttons above.
+            Click
+            <strong>“Download extension (ZIP)”</strong> above and save
+            <code>MalUrl.zip</code> to your computer.
+          </li>
+          <li>Unzip the file so you get a folder called something like <code>MalUrl</code>.</li>
+          <li>Open Google Chrome.</li>
+          <li>In the address bar, go to <code>chrome://extensions</code>.</li>
+          <li>Turn on <strong>Developer mode</strong> (top-right toggle).</li>
+          <li>Click <strong>“Load unpacked”</strong>.</li>
+          <li>
+            Select the unzipped extension folder (the one that contains
+            <code>manifest.json</code>).
           </li>
           <li>
-            <strong>2. Open any website or paste a URL</strong> into the MalURL popup.
-          </li>
-          <li>
-            <strong>3. The URL is sent to a FastAPI server</strong> hosted on Render,
-            where the LightGBM model runs.
-          </li>
-          <li>
-            <strong>4. You immediately see the prediction</strong> and probability
-            for each class.
+            The MalURLX extension should now appear in your extensions list. Pin it from
+            the toolbar to access it easily.
           </li>
         </ol>
+
+        <p class="hint">
+          If you update the extension in the future, just remove the old version from
+          <code>chrome://extensions</code> and load the new folder again.
+        </p>
+      </section>
+
+      <section id="how-it-works">
+        <h2>How it works (high level)</h2>
+        <p>
+          The Chrome extension sends the URL you enter to a FastAPI backend developed by
+          <strong>Santanu Mondal</strong>. The backend:
+        </p>
+        <ol class="dev-steps">
+          <li>Normalizes and parses the URL.</li>
+          <li>Extracts a rich set of lexical and structural features.</li>
+          <li>Feeds those features into a trained LightGBM model.</li>
+          <li>
+            Returns a label, such as <strong>SAFE</strong> or <strong>PHISHING</strong>,
+            and (optionally) probability scores for each class.
+          </li>
+        </ol>
+        <p>
+          Common trusted domains (e.g. <code>google.com</code>, <code>wikipedia.org</code>)
+          may be whitelisted by the backend to avoid unnecessary warnings.
+        </p>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-inner">
+        <span>© <span id="year"></span> MalURLX · Developer build</span>
+        <span>
+          <a href="privacy.html">Privacy Policy</a>
+        </span>
       </div>
-    </section>
+    </footer>
 
-    <!-- INSTALL INSTRUCTIONS (DEV MODE) -->
-    <section class="section" id="dev-mode">
-      <div class="container">
-        <h2>Install using Developer Mode (temporary)</h2>
-        <div class="card instructions">
-          <ol>
-            <li>Click <strong>“Download ZIP (Developer mode)”</strong> above.</li>
-            <li>Unzip the file somewhere on your computer.</li>
-            <li>Open <code>chrome://extensions</code> in Chrome.</li>
-            <li>Turn on <strong>Developer mode</strong> (top-right toggle).</li>
-            <li>Click <strong>“Load unpacked”</strong> and select the unzipped folder.</li>
-            <li>MalURL will appear in your extensions bar. Pin it for quick access.</li>
-          </ol>
-          <p class="small-note">
-            Once the extension is published on the Chrome Web Store, users won’t
-            need Developer mode – they can just click “Add to Chrome”.
-          </p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <div class="container footer-inner">
-      <p>© <span id="year"></span> MalURL – Malicious URL Detector.</p>
-      <p>Built by Santanu Mondal.</p>
-    </div>
-  </footer>
-
-  <script>
-    // Set current year in footer
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
-</body>
+    <script>
+      // Set current year in footer
+      document.getElementById("year").textContent =
+        new Date().getFullYear().toString();
+    </script>
+  </body>
 </html>
